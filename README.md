@@ -52,9 +52,9 @@ In the lending sector, financial institutions must decide which borrowers to app
 |---|---|
 | **Source Name** | _Kaggle_ |
 | **Direct Access Link** | _https://www.kaggle.com/datasets/yasserh/loan-default-dataset_ |
-| **Row Count** | _Must be greater than 5,000_ |
-| **Column Count** | _Must be greater than 8 meaningful columns_ |
-| **Time Period Covered** | _e.g. Jan 2019 to Dec 2023_ |
+| **Row Count** | _15,000_ |
+| **Column Count** | _34_ |
+| **Time Period Covered** | _2019_ |
 | **Format** | _CSV_ |
 
 **Key Columns Used**
