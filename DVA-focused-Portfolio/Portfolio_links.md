@@ -8,7 +8,7 @@
 | Prakhar Rawat         | [View Portfolio](https://github.com/Prakhar13o3)     |
 | Nitin Kumar           | [View Portfolio](https://github.com/Nitin-0017)      |
 | Isha Tomar            | [View Portfolio](https://github.com/Bytebard089)     |
-| Kapish Rohilla        | [View Portfolio]([https://github.com/kapish9741](https://kapish9741.github.io/))      |
+| Kapish Rohilla        | [View Portfolio](https://kapish9741.github.io/)       |
 | Rishi Raj             | [View Portfolio](https://github.com/rishiraj38)      |
 | Nishant Ranjan Singh  | [View Portfolio](https://github.com/IAmNishantSingh) |
 
