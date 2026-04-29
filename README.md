@@ -132,35 +132,35 @@ Dashboard screenshots are in [`tableau/screenshots/`](tableau/screenshots/) and 
 
 ## Key Insights
 
-**1 in 4 Borrowers Defaults — Portfolio Under Systemic Stress**  
-The portfolio default rate is **23.72%** — nearly 1 in 4 loans. This is not a borrower-level outlier problem; it signals a structural gap in the underwriting framework that cannot be resolved with incremental fixes.
+**1. 1 in 4 Borrowers Defaults — Portfolio Under Systemic Stress**
+> The portfolio default rate is **23.72%** — nearly 1 in 4 loans. This is not a borrower-level outlier problem; it signals a structural gap in the underwriting framework that cannot be resolved with incremental fixes.
 
-**LTV Is the Only Reliable Numerical Risk Gate**  
-`ltv` is the strongest numerical predictor of default (`r=0.0976`, logistic coefficient=0.2239). Very High LTV borrowers (≥90%) default at **35.8%** — more than double the Moderate LTV bucket (16.2%). LTV-based banding is statistically validated (`χ²=451.9`) and is the strongest single gating variable available.
+**2. LTV Is the Only Reliable Numerical Risk Gate**
+> `ltv` is the strongest numerical predictor of default (`r=0.0976`, logistic coefficient=0.2239). Very High LTV borrowers (≥90%) default at **35.8%** — more than double the Moderate LTV bucket (16.2%). LTV-based banding is statistically validated (`χ²=451.9`) and is the strongest single gating variable available.
 
-**DTI Works Only at the Extremes — Not at the Industry Threshold**  
-DTI is the second strongest signal (`r=0.0929`), but the industry-standard 43% cutoff is counterproductive in this portfolio — borrowers below it actually default slightly more (24.3%) than those above (22.1%). Risk only concentrates meaningfully below DTI=35 (13.0% default) and above DTI=50 (40.6%), requiring a dual-band replacement policy.
+**3. DTI Works Only at the Extremes — Not at the Industry Threshold**
+> DTI is the second strongest signal (`r=0.0929`), but the industry-standard 43% cutoff is counterproductive in this portfolio — borrowers below it actually default slightly more (24.3%) than those above (22.1%). Risk only concentrates meaningfully below DTI=35 (13.0% default) and above DTI=50 (40.6%), requiring a dual-band replacement policy.
 
-**Credit Score Is Statistically Irrelevant**  
-`credit_score` shows near-zero correlation with default (`r=-0.0028`, `p=0.735`). Borrowers rated Excellent default at 23.7% — virtually identical to those rated Poor at 23.9%. The `credit_score_bucket` chi-square test also returned non-significant (`p=0.722`). Score-first screening provides false confidence with no actual risk separation.
+**4. Credit Score Is Statistically Irrelevant**
+> `credit_score` shows near-zero correlation with default (`r=-0.0028`, `p=0.735`). Borrowers rated Excellent default at 23.7% — virtually identical to those rated Poor at 23.9%. The `credit_score_bucket` chi-square test also returned non-significant (`p=0.722`). Score-first screening provides false confidence with no actual risk separation.
 
-**Product Features Outperform Borrower Characteristics**  
-Lump sum payment (`χ²=498.5`) and negative amortisation (`χ²=363.1`) are the two strongest default predictors in the entire portfolio — stronger than any borrower metric. These are loan design choices, not borrower traits, meaning the institution's own product catalogue is a primary source of default risk.
+**5. Product Features Outperform Borrower Characteristics**
+> Lump sum payment (`χ²=498.5`) and negative amortisation (`χ²=363.1`) are the two strongest default predictors in the entire portfolio — stronger than any borrower metric. These are loan design choices, not borrower traits, meaning the institution's own product catalogue is a primary source of default risk.
 
-**Lump Sum Payment Is the Highest-Risk Feature at 76.8%**  
-Borrowers with a lump sum payment structure default at **76.8%** — 3× the portfolio average. Only 315 such loans exist, yet 242 defaulted. These borrowers make no monthly payments and rely on a future windfall that rarely materialises. This is the single most actionable restriction available.
+**6. Lump Sum Payment Is the Highest-Risk Feature at 76.8%**
+> Borrowers with a lump sum payment structure default at **76.8%** — 3× the portfolio average. Only 315 such loans exist, yet 242 defaulted. These borrowers make no monthly payments and rely on a future windfall that rarely materialises. This is the single most actionable restriction available.
 
-**Negative Amortisation Doubles the Default Rate**  
-`neg_ammortization = yes` borrowers default at **43.5%** — nearly double the 23.7% portfolio average. These loans accumulate debt instead of reducing it, directly eroding repayment capacity over time. The strong chi-square association (`χ²=363.1`) confirms this is not coincidence.
+**7. Negative Amortisation Doubles the Default Rate**
+> `neg_ammortization = yes` borrowers default at **43.5%** — nearly double the 23.7% portfolio average. These loans accumulate debt instead of reducing it, directly eroding repayment capacity over time. The strong chi-square association (`χ²=363.1`) confirms this is not coincidence.
 
-**North-East and Home Improvement Are Concentrated Loss Pockets**  
-The North-East region has the highest default rate at **~33%**, over 11 percentage points above the North region. Home improvement loans default at **~32%**, the highest of any loan purpose — borrowers stack new debt on existing mortgages, amplifying total financial burden. Geographic and purpose-specific controls deliver more targeted loss containment than uniform policy.
+**8. North-East and Home Improvement Are Concentrated Loss Pockets**
+> The North-East region has the highest default rate at **~33%**, over 11 percentage points above the North region. Home improvement loans default at **~32%**, the highest of any loan purpose — borrowers stack new debt on existing mortgages, amplifying total financial burden. Geographic and purpose-specific controls deliver more targeted loss containment than uniform policy.
 
-**Personal Loans Carry Structurally Higher Unsecured Risk**  
-Personal loans default at **33.5%** — nearly 12 percentage points above home loans (21.7%). Without collateral backing, these loans have no recovery buffer when borrowers face financial stress. A uniform approval standard across loan types systematically misprices this structural difference.
+**9. Personal Loans Carry Structurally Higher Unsecured Risk**
+> Personal loans default at **33.5%** — nearly 12 percentage points above home loans (21.7%). Without collateral backing, these loans have no recovery buffer when borrowers face financial stress. A uniform approval standard across loan types systematically misprices this structural difference.
 
-**Risk Tiers Replace Single-Variable Screening**  
-The composite `risk_tier` framework (built on LTV, DTI, product features, and behavioural flags) produces clear default rate separation: Very High tier defaults at 45%+ while Low tier defaults at under 10%. This multi-factor segmentation outperforms any single-variable gate and directly supports the LTV + DTI dual-band lending policy.
+**10. Risk Tiers Replace Single-Variable Screening**
+> The composite `risk_tier` framework (built on LTV, DTI, product features, and behavioural flags) produces clear default rate separation: Very High tier defaults at 45%+ while Low tier defaults at under 10%. This multi-factor segmentation outperforms any single-variable gate and directly supports the LTV + DTI dual-band lending policy.
 
 ---
 
@@ -253,7 +253,7 @@ This table must match evidence in GitHub Insights, PR history, and committed fil
 
 | Team Member | Dataset and Sourcing | ETL and Cleaning | EDA and Analysis | Statistical Analysis | Tableau Dashboard | Report Writing | PPT and Viva |
 |---|---|---|---|---|---|---|---|
-| _Daksh Batra_ (Project Lead) | Support | Support | Support | Support | Support | Support | Support |
+| _Daksh Batra_ (Project Lead) | Support | Support | Support | Support | Owner | Support | Support |
 | _Prakhar Rawat_ (Data Lead) | Owner | Support | Support | Support | Support | Support | Support |
 | _Nitin Kumar_ (ETL Lead) | Support | Owner | Support | Support | Support | Support | Support |
 | _Isha Tomar_ (Analysis Lead) | Support | Support | Owner | Owner | Support | Support | Support |
