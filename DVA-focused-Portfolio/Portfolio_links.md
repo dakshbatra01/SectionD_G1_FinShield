@@ -1,10 +1,10 @@
-# 👨‍💻 Team Members
+# Team Members
 
-## 📌 Portfolio Links
+## Portfolio Links
 
 | Name                  | Portfolio Link                                      |
 |-----------------------|------------------------------------------------------|
-| Daksh Batra           | [View Portfolio](https://github.com/dakshbatra01)    |
+| Daksh Batra           | [View Portfolio](https://dva-portfolio-kappa.vercel.app/)    |
 | Prakhar Rawat         | [View Portfolio](https://github.com/Prakhar13o3)     |
 | Nitin Kumar           | [View Portfolio](https://github.com/Nitin-0017)      |
 | Isha Tomar            | [View Portfolio](https://github.com/Bytebard089)     |
@@ -14,5 +14,5 @@
 
 ---
 
-## 📬 Connect
+## Connect
 Click on any link to view the portfolio.
