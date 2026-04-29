@@ -235,8 +235,6 @@ This table must match evidence in GitHub Insights, PR history, and committed fil
 | _Rishi Raj_ (Strategy Lead) | Support | Support | Support | Support | Support | Owner | Support |
 | _Nishant Ranjan Singh_ (PPT and Quality Lead) | Support | Support | Support | Support | Support | Support | Owner |
 
-_Note: Daksh Batra (Project Lead) provided cross-functional coordination, timeline tracking, and final integration oversight across all workstreams._
-
 _Declaration: We confirm that the above contribution details are accurate and verifiable through GitHub Insights, PR history, and submitted artifacts._
 
 **Team Lead Name:** Daksh Batra
