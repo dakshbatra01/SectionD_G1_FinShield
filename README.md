@@ -16,7 +16,7 @@
 | **Section** | _D_ |
 | **Faculty Mentor** | _Archit Raj Sir_ |
 | **Institute** | Newton School of Technology |
-| **Submission Date** | _To be filled by team_ |
+| **Submission Date** | _29 April 2026_ |
 
 ### Team Members
 
@@ -53,7 +53,7 @@ Financial institutions face significant losses due to loan defaults and ineffici
 | **Source Name** | _Kaggle_ |
 | **Direct Access Link** | _https://www.kaggle.com/datasets/yasserh/loan-default-dataset_ |
 | **Row Count** | _15,000_ |
-| **Column Count** | _34 (raw) → 37 (Tableau-ready)_ |
+| **Column Count** | _34_ |
 | **Time Period Covered** | _2019_ |
 | **Format** | _CSV_ |
 
@@ -61,15 +61,14 @@ Financial institutions face significant losses due to loan defaults and ineffici
 
 | Column Name | Description | Role in Analysis |
 |---|---|---|
-| `status` | Loan default indicator (0 = No Default, 1 = Default) | Target variable |
-| `ltv` | Loan-to-Value ratio | Strongest numerical predictor of default |
-| `debt_to_income_ratio` | Debt-to-Income ratio | Second strongest predictor |
-| `loan_amount` | Total loan amount | Exposure at Default computation |
+| `status` | Loan default indicator (0/1) | Target variable |
+| `ltv` | Loan-to-Value ratio | Strongest predictor — KPI / Risk Score |
+| `debt_to_income_ratio` | Debt-to-Income ratio | Second strongest — KPI / Risk Score |
+| `loan_amount` | Total loan amount | EAD / Expected Loss computation |
 | `income` | Borrower income | Risk scoring component |
 | `credit_score` | Borrower credit score | Validated as non-predictive (p=0.735) |
-| `neg_ammortization` | Negative amortisation flag | Strongest categorical risk signal (χ²=363.1) |
-| `lump_sum_payment` | Lump sum payment flag | Protective factor (χ²=498.5) |
-| `ltv_risk_bucket` | LTV risk band (Low/Moderate/High/Very High) | Risk segmentation |
+| `neg_ammortization` | Negative amortisation flag | Strongest categorical risk signal |
+| `lump_sum_payment` | Lump sum payment flag | Protective factor |
 | `risk_tier` | Computed risk tier | Final lending decision driver |
 
 For full column definitions, see [`docs/data_dictionary.md`](docs/data_dictionary.md).
@@ -78,56 +77,67 @@ For full column definitions, see [`docs/data_dictionary.md`](docs/data_dictionar
 
 ## KPI Framework
 
-| KPI | Definition | Formula / Computation |
-|---|---|---|
-| Portfolio Default Rate | Overall percentage of loans that defaulted | `(Defaults / Total Loans) × 100` → **23.72%** |
-| Exposure at Default (EAD) | Total loan amount at risk from defaults | `SUM(loan_amount) WHERE status=1` → **₹1.12B (22.64% of portfolio)** |
-| Avg DTI by Default Status | Mean DTI for defaulters vs non-defaulters | Defaulters: **39.59** vs Non-defaulters: **37.49** (2.1pt gap) |
-| Avg LTV by Default Status | Mean LTV for defaulters vs non-defaulters | Defaulters: **75.78** vs Non-defaulters: **71.65** (4.1pt gap) |
-| Default Rate by LTV Bucket | Per-segment default rate | Low: 13.29% → Moderate: 31.65% → Very High: 23.42% |
-| Default Rate by Loan Type | Per-product default rate | Personal Loan: **33.49%** vs Home Loan: **21.74%** |
-| Default Rate by Region | Geographic default distribution | North-East: **33.60%** (highest) vs North: **22.04%** (lowest) |
-| Composite Risk Score | Weighted DTI + LTV + product features | Computed in `notebooks/05_final_load_prep.ipynb` |
-| Risk Tier | Categorical risk band | Score → Low / Medium / High / Very High |
+| # | KPI | Definition | Target Dashboard |
+|---|-----|-----------|------------------|
+| 1 | Total Loans | COUNT(*) | Portfolio Exposure & Default Risk Overview |
+| 2 | Default Rate | Defaults / Total × 100 | Portfolio Exposure & Default Risk Overview |
+| 3 | Total Loan Amount | SUM(loan_amount) | Portfolio Exposure & Default Risk Overview |
+| 4 | High Risk % | COUNT(LTV>80) / Total × 100 | Portfolio Exposure & Default Risk Overview |
+| 5 | Avg Interest Rate | AVG(rate_of_interest) | Portfolio Exposure & Default Risk Overview |
+| 6 | Expected Loss (EL) | Default Rate × LGD × EAD | Portfolio Exposure & Default Risk Overview |
+| 7 | Average Income | AVG(income) | Borrower Risk Drivers Analysis |
+| 8 | Credit Score Gap | AVG(score, defaulters) / AVG(score, non-defaulters) | Borrower Risk Drivers Analysis |
+| 9 | High Borrower Risk % | COUNT(LTV>80) / Total × 100 | Borrower Risk Drivers Analysis |
+| 10 | Borrower Income Gap | AVG(income, defaulters) / AVG(income, all) | Borrower Risk Drivers Analysis |
+| 11 | Top Loan Purpose | MAX(SUM(defaulted_amount) BY purpose) | Product & Geographic Risk Trends |
+| 12 | Average Term | AVG(term) | Product & Geographic Risk Trends |
+| 13 | Highest-Loss Region | MAX(SUM(defaulted_amount) BY region) | Product & Geographic Risk Trends |
+| 14 | Most Risky Loan Type | MAX(Default Rate BY loan_type) | Product & Geographic Risk Trends |
+| 15 | Worst Region–Product Combo | MAX(SUM(defaulted_amount) BY region, loan_type) | Product & Geographic Risk Trends |
+| 16 | Loss Share by Purpose | defaulted_per_purpose / total_defaulted × 100 | Product & Geographic Risk Trends |
 
-KPI logic is documented in `notebooks/04_statistical_analysis.ipynb` and `notebooks/05_final_load_prep.ipynb`.
+Full KPI logic is documented in `notebooks/05_final_load_prep.ipynb`.
 
 ---
 
-## Tableau Dashboard
+## Tableau Dashboards
 
 | Item | Details |
 |---|---|
-| **Dashboard URL** | _Paste Tableau Public link here_ |
-| **Executive View** | _Describe the high-level KPI summary view_ |
-| **Operational View** | _Describe the detailed drill-down view_ |
-| **Main Filters** | _List the interactive filters used_ |
+| **Dashboard URL** | [View Tableau Public Dashboard](https://public.tableau.com/shared/4SBGTH5PQ?:display_count=n&:origin=viz_share_link) |
 
-Store dashboard screenshots in [`tableau/screenshots/`](tableau/screenshots/) and document the public links in [`tableau/dashboard_links.md`](tableau/dashboard_links.md).
+### 1. Portfolio Exposure & Default Risk Overview
+*   **Business Question**: *"How healthy is our current portfolio, and where is our risk concentrated?"*
+*   **KPI Cards**: Total Loans, Default Rate, Total Loan Amt, High Risk %, Avg Interest Rate
+*   **Charts**: Loan Distribution by Product, Interest Rate vs Default by Loan Purpose, Loan Amount Distribution, Loan Amount by Interest Rate
+*   **Filters**: Loan Purpose, Region, Credit Score Bucket
+
+### 2. Borrower Risk Drivers Analysis
+*   **Business Question**: *"What borrower characteristics drive default, and how should we adjust underwriting?"*
+*   **KPI Cards**: Average Income, Credit Score Gap, High Borrower Risk %, Borrower Income Gap
+*   **Charts**: Default Rate by LTV, Default by Income, LTV × Credit Score Heatmap, Loan Volume vs Default Volume by Credit Score, Default Rate by Credit Score Bucket
+*   **Filters**: Loan Type, Credit Score Bucket, Region, Approv In Adv, LTV Risk Bucket
+
+### 3. Product & Geographic Risk Trends
+*   **Business Question**: *"Which products and regions are bleeding money, and where should we restrict lending?"*
+*   **KPI Cards**: Top Loan Purpose, Average Term, Highest-Loss Region, Most Risky Loan Type, Worst Region–Product Combo
+*   **Charts**: Loss by Region, Risk vs Pricing by Loan Type, Region × Loan Type Heatmap, Loss Share, Avg DTI by Loan Type, Default Rate by Loan Type
+*   **Filters**: Region, Loan Type, Loan Limit, Approv In Adv
+
+Dashboard screenshots are in [`tableau/screenshots/`](tableau/screenshots/) and public links in [`tableau/dashboard_links.md`](tableau/dashboard_links.md).
 
 ---
 
 ## Key Insights
 
-1. **Credit score is not a valid risk predictor** — T-test (p=0.735), point biserial correlation (r=-0.0028), and logistic regression coefficient (-0.0033) all confirm credit score has zero discriminatory power in this portfolio. Lending decisions based on credit score alone will not reduce defaults.
-
-2. **LTV is the strongest numerical predictor of default** — Point biserial r=0.0976 (highest), logistic regression coefficient 0.2239 (odds ratio 1.251). Each standard deviation increase in LTV raises default odds by 25.1%.
-
-3. **DTI is the second strongest predictor** — Point biserial r=0.0929, logistic regression coefficient 0.1952 (odds ratio 1.216). DTI > 35 shows 28.0% default vs 13.0% below — a 15-point gap.
-
-4. **The industry-standard DTI threshold of 43% is ineffective** — At DTI=43%, the default rate difference is just -2.2%, near zero discriminatory power. Only extreme bands work: DTI < 35 = low risk, DTI > 50 = 40.6% default rate.
-
-5. **Product features are the strongest categorical risk signals** — Negative amortisation (χ²=363.1) and lump sum payment (χ²=498.5) far exceed credit score bands (χ²=2.13, p=0.722) in default prediction.
-
-6. **Personal loans carry 54% higher default risk than home loans** — 33.49% vs 21.74% default rate. Personal loans require stricter screening despite smaller average amounts.
-
-7. **North-East region shows 33.60% default rate** — highest across all regions, 52% higher than North (22.04%). Geographic concentration risk needs monitoring.
-
-8. **Exposure at Default is ₹1.12 billion (22.64% of portfolio)** — Nearly a quarter of the portfolio's total loan exposure is at risk, underscoring the need for proactive risk segmentation.
-
-9. **Defaulters have 4.1 points higher average LTV than non-defaulters** — LTV 75.78 vs 71.65, confirming that over-leveraged borrowers default more frequently.
-
-10. **Higher income is protective against default** — Logistic regression confirms income has a negative coefficient (-0.0463), with lower-income borrowers showing elevated default probability.
+1. The portfolio default rate is **23.72%**, so reducing default risk must be treated as a primary business objective.
+2. `ltv` is the strongest numerical risk signal (`r=0.0976`), indicating high leverage is a key driver of defaults.
+3. `debt_to_income_ratio` is the second strongest numerical risk signal (`r=0.0929`), confirming repayment stress as a major default trigger.
+4. `credit_score` is not statistically predictive in this dataset (`p=0.735`, `r=-0.0028`), so score-only screening is insufficient.
+5. `neg_ammortization` has a strong adverse association with defaults (`χ²=363.1`) and should be tightly controlled.
+6. `lump_sum_payment` behaves as a protective factor (`χ²=498.5`) and can be used in safer product structuring.
+7. The derived `risk_score` and `risk_tier` framework provides clearer segmentation than single-variable filters, supporting better underwriting decisions.
+8. Losses are concentrated in specific segment combinations (region, loan type, and purpose), so targeted controls are more effective than uniform policy actions.
 
 ---
 
@@ -135,11 +145,11 @@ Store dashboard screenshots in [`tableau/screenshots/`](tableau/screenshots/) an
 
 | # | Insight | Recommendation | Expected Impact |
 |---|---|---|---|
-| 1 | Credit score has zero predictive power (p=0.735) | Replace credit-score-first screening with LTV + DTI dual-band risk assessment | Eliminate false confidence in 3,773+ approvals based on non-predictive metric |
-| 2 | DTI < 35 = 13% default vs > 50 = 40.6% default | Implement DTI dual-band policy: approve DTI < 35, restrict DTI > 50, review 35–50 | Reduce high-DTI default exposure by up to 40% |
-| 3 | Negative amortisation (χ²=363.1) strongly predicts default | Restrict or eliminate negative amortisation products for Medium/High risk tiers | Directly reduce the strongest categorical default signal |
-| 4 | Personal loans default at 33.49% vs home loans at 21.74% | Apply risk-based pricing: higher rates or reduced amounts for personal loans | Offset higher expected losses through appropriate risk premiums |
-| 5 | North-East region has 33.60% default rate | Implement regional exposure caps and enhanced due diligence for North-East | Prevent geographic concentration risk from compounding portfolio losses |
+| 1 | 2, 3 | Implement a dual-threshold underwriting policy using `ltv` and `debt_to_income_ratio` (auto-approve low-risk, review medium-risk, restrict extreme-risk bands). | Lower approval of fragile profiles and improved portfolio default performance. |
+| 2 | 4, 7 | Shift from credit-score-first screening to `risk_score` / `risk_tier` based decisioning. | Better alignment between approval decisions and observed default behavior. |
+| 3 | 5 | Restrict negative-amortisation loans through stricter eligibility and risk-based pricing controls. | Reduced structural default risk and lower expected loss concentration. |
+| 4 | 6 | Offer safer repayment structures (including lump-sum capable plans where suitable) for borderline borrowers. | Improved repayment resilience and reduced delinquency spillover. |
+| 5 | 8 | Run a monthly segment watchlist (region × loan type × purpose) and apply targeted lending limits in high-loss pockets. | Faster risk containment and improved capital allocation. |
 
 ---
 
@@ -153,8 +163,6 @@ SectionD_G1_FinShield/
 |-- data/
 |   |-- raw/                         # Original dataset (never edited)
 |   `-- processed/                   # Cleaned output from ETL pipeline
-|       |-- loan_final_cleaned.csv   # Output of notebook 02
-|       `-- loan_tableau_ready.csv   # Output of notebook 05 (Tableau export)
 |
 |-- notebooks/
 |   |-- 01_extraction.ipynb
@@ -219,18 +227,21 @@ This table must match evidence in GitHub Insights, PR history, and committed fil
 
 | Team Member | Dataset and Sourcing | ETL and Cleaning | EDA and Analysis | Statistical Analysis | Tableau Dashboard | Report Writing | PPT and Viva |
 |---|---|---|---|---|---|---|---|
-| _Member 1_ | _Owner / support_ | _Owner / support_ | _Owner / support_ | _Owner / support_ | _Owner / support_ | _Owner / support_ | _Owner / support_ |
-| _Member 2_ | _Owner / support_ | _Owner / support_ | _Owner / support_ | _Owner / support_ | _Owner / support_ | _Owner / support_ | _Owner / support_ |
-| _Member 3_ | _Owner / support_ | _Owner / support_ | _Owner / support_ | _Owner / support_ | _Owner / support_ | _Owner / support_ | _Owner / support_ |
-| _Member 4_ | _Owner / support_ | _Owner / support_ | _Owner / support_ | _Owner / support_ | _Owner / support_ | _Owner / support_ | _Owner / support_ |
-| _Member 5_ | _Owner / support_ | _Owner / support_ | _Owner / support_ | _Owner / support_ | _Owner / support_ | _Owner / support_ | _Owner / support_ |
-| _Member 6_ | _Owner / support_ | _Owner / support_ | _Owner / support_ | _Owner / support_ | _Owner / support_ | _Owner / support_ | _Owner / support_ |
+| _Daksh Batra_ (Project Lead) | Support | Support | Support | Support | Support | Support | Support |
+| _Prakhar Rawat_ (Data Lead) | Owner | Support | Support | Support | Support | Support | Support |
+| _Nitin Kumar_ (ETL Lead) | Support | Owner | Support | Support | Support | Support | Support |
+| _Isha Tomar_ (Analysis Lead) | Support | Support | Owner | Owner | Support | Support | Support |
+| _Kapish Rohilla_ (Visualization Lead) | Support | Support | Support | Support | Owner | Support | Support |
+| _Rishi Raj_ (Strategy Lead) | Support | Support | Support | Support | Support | Owner | Support |
+| _Nishant Ranjan Singh_ (PPT and Quality Lead) | Support | Support | Support | Support | Support | Support | Owner |
+
+_Note: Daksh Batra (Project Lead) provided cross-functional coordination, timeline tracking, and final integration oversight across all workstreams._
 
 _Declaration: We confirm that the above contribution details are accurate and verifiable through GitHub Insights, PR history, and submitted artifacts._
 
-**Team Lead Name:** _____________________________
+**Team Lead Name:** Daksh Batra
 
-**Date:** _______________
+**Date:** 29 April 2026
 
 
 *Newton School of Technology - Data Visualization & Analytics | Capstone 2*

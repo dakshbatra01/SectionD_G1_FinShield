@@ -10,12 +10,12 @@ This document defines every field used in the analysis and Tableau dashboards. I
 |---|---|
 | Dataset name | Loan Default Dataset |
 | Source | Kaggle — [Loan Default Dataset](https://www.kaggle.com/datasets/yasserh/loan-default-dataset) |
-| Raw file name | `data/raw/Loan_Default.csv` |
+| Raw file name | `data/raw/Loan_Default_Raw.csv` |
 | Processed files | `loan_stage1_cleaned.csv`, `loan_final_cleaned.csv`, `loan_tableau_ready.csv` |
 | Last updated | April 2026 |
 | Granularity | One row per loan application |
 | Row count | 15,000 |
-| Column count | 34 (raw) → 37 (Tableau-ready) |
+| Column count | 34 (raw) → 37 (Tableau-ready, incl. derived risk columns) |
 | Time period | 2019 |
 
 ---
@@ -35,7 +35,7 @@ This document defines every field used in the analysis and Tableau dashboards. I
 |---|---|---|---|---|---|
 | `gender` | string | Gender of the primary applicant | `male`, `female`, `joint`, `NA` | EDA / Tableau | 3,773 missing values filled with `NA`; raw data had `sex not available` |
 | `age` | string | Age band of the borrower | `35-44` | EDA / Tableau | Categorical bins: `<25`, `25-34`, `35-44`, `45-54`, `55-64`, `65-74`, `>74` |
-| `income` | float | Annual income of the borrower | `1740.0` | KPI / Risk Score / Tableau | No nulls; 540 unique values. Below-median income adds +1 to risk score |
+| `income` | float | Annual income of the borrower | `1740.0` | KPI / Risk Score / Dashboard 2 | No nulls; 540 unique values. Used in Borrower Income Gap KPI. Below-median income adds +1 to risk score |
 
 ### Loan Characteristics
 
@@ -43,11 +43,11 @@ This document defines every field used in the analysis and Tableau dashboards. I
 |---|---|---|---|---|---|
 | `loan_limit` | string | Whether the loan conforms to standard limits | `conforming loan` | EDA / Tableau | 2 values. Decoded from raw codes (`cf`, `ncf`) |
 | `approv_in_adv` | string | Whether the loan was pre-approved | `no pre-approval` | EDA / Tableau | 2 values. Decoded from raw (`pre`, `nopre`) |
-| `loan_type` | string | Type of loan product | `home loan` | KPI / Tableau | 3 values: `home loan`, `personal loan`, `commercial loan`. Decoded from (`type1`, `type2`, `type3`) |
-| `loan_purpose` | string | Purpose of the loan | `debt consolidation` | EDA / Tableau | 4 values: `home purchase`, `debt consolidation`, `business purpose`, `refinancing`. Decoded from (`p1`–`p4`) |
+| `loan_type` | string | Type of loan product | `home loan` | KPI / Dashboard 1, 2, 3 | 3 values: `home loan`, `personal loan`, `commercial loan`. Decoded from (`type1`, `type2`, `type3`) |
+| `loan_purpose` | string | Purpose of the loan | `debt consolidation` | KPI / Dashboard 1, 3 | 4 values: `home purchase`, `debt consolidation`, `business purpose`, `home improvement`. Decoded from (`p1`–`p4`) |
 | `loan_amount` | int | Total loan amount | `116500` | KPI / EAD / Tableau | No nulls; 150 unique values. Used in Exposure at Default computation |
-| `term` | float | Loan term in months | `360.0` | EDA | No nulls; 24 unique terms |
-| `rate_of_interest` | float | Annual interest rate | `4.99` | EDA / Tableau | No nulls; 74 unique rates |
+| `term` | float | Loan term in months | `360.0` | Dashboard 3 KPI | No nulls; 24 unique terms. Average Term (335.0) shown as KPI card in Dashboard 3 |
+| `rate_of_interest` | float | Annual interest rate | `4.99` | KPI / Dashboard 1, 2, 3 | No nulls; 74 unique rates. Avg Interest Rate (4.036%) shown in Dashboard 1 |
 | `interest_rate_spread` | float | Spread over the benchmark rate | `1.4474` | EDA | No nulls |
 | `upfront_charges` | float | Upfront fees charged at origination | `2463.12` | EDA | Rounded to 2 decimal places during cleaning |
 | `property_value` | float | Appraised value of the collateral property | `138000.0` | EDA | No nulls; 244 unique values |
@@ -58,7 +58,7 @@ This document defines every field used in the analysis and Tableau dashboards. I
 |---|---|---|---|---|---|
 | `credit_worthiness` | string | Internal creditworthiness assessment | `high creditworthy` | EDA / Tableau | 2 values. Decoded from raw (`l1`, `l2`) |
 | `credit_type` | string | Credit bureau used for scoring | `experian` | EDA | 4 values: `experian`, `crif`, `cibil`, `equifax`. Decoded from raw |
-| `credit_score` | int | Borrower's credit score | `679` | Statistical Analysis | Range ~500–900. **Not predictive of default** (p=0.735, r=-0.0028) |
+| `credit_score` | int | Borrower's credit score | `679` | Dashboard 2 / Statistical Analysis | Range ~500–900. **Not predictive of default** (p=0.735, r=-0.0028). Used in Credit Score Gap KPI and LTV×Credit Score Heatmap |
 | `co-applicant_credit_type` | string | Credit bureau of co-applicant | `cib` | EDA | 2 values: `cib`, `exp` |
 | `debt_to_income_ratio` | float | Borrower's DTI ratio (%) | `41.0` | KPI / Risk Score / Tableau | Renamed from `dtir1`. Second strongest predictor (r=0.0929) |
 
@@ -85,8 +85,8 @@ This document defines every field used in the analysis and Tableau dashboards. I
 | `open_credit` | string | Whether borrower has open credit lines | `no open credit` | EDA | 2 values. Decoded from (`opc`, `nopc`) |
 | `business_or_commercial` | string | Whether the loan is for business or personal use | `business use` | EDA | 2 values. Decoded from (`b/c`, `nob/c`) |
 | `submission_of_application` | string | Submission channel | `to_inst` | EDA | 2 values: `to_inst`, `not_inst` |
-| `ltv` | float | Loan-to-Value ratio (%) | `84.42` | KPI / Risk Score / Tableau | Strongest numerical predictor of default (r=0.0976, logistic coeff=0.2239) |
-| `region` | string | Geographic region | `north` | KPI / Tableau | 4 values: `north`, `south`, `central`, `north-east` |
+| `ltv` | float | Loan-to-Value ratio (%) | `84.42` | KPI / Risk Score / Dashboard 1, 2 | Strongest numerical predictor of default (r=0.0976, logistic coeff=0.2239). High Risk % KPI (>80) |
+| `region` | string | Geographic region | `north` | KPI / Dashboard 3 | 4 values: `north`, `south`, `central`, `north-east`. Used in Highest-Loss Region and Region×LoanType Heatmap |
 
 ### Target Variable
 
@@ -101,11 +101,11 @@ This document defines every field used in the analysis and Tableau dashboards. I
 | Derived Column | Logic | Business Meaning |
 |---|---|---|
 | `ltv_risk_bucket` | Low (≤50), Moderate (50–80), High (80–95), Very High (>95) | Segments borrowers by leverage risk; validated by χ²=491.4 |
-| `credit_score_bucket` | Poor (<580), Fair (580–669), Good (670–739), Excellent (740–799), Exceptional (≥800) | Industry-standard credit bands; not predictive in this portfolio (p=0.722) |
+| `credit_score_bucket` | Poor (<580), Fair (580–669), Good (670–739), Very Good (740–799), Excellent (≥800) | Industry-standard credit bands; used in Dashboard 2 heatmap and bar charts |
 | `debt_to_income_ratio` | Renamed from `dtir1` in raw data | Standardised column name for clarity |
 | `risk_score` | Weighted composite: DTI>35 (+2), DTI>50 (+4), LTV bucket (Moderate +1, High +2, Very High +3), neg_ammortization=yes (+3), lump_sum=yes (−2), income < median (+1). Floor at 0 | Borrower-level default risk quantification |
 | `risk_tier` | Low (≤2), Medium (3–5), High (6–8), Very High (>8) | Categorical risk band driving lending decisions |
-| `lending_action` | Low → Approve Standard, Medium → Approve with Conditions, High → Restrict, Very High → Reject/Review | Actionable lending decision per borrower |
+| `defaulted_loan_amount` | `loan_amount × status` (0 if no default) | Pre-computed loss column for Tableau Dashboard 3 — enables direct SUM for Loss by Region, Region×LoanType Heatmap, and Loss Share charts |
 
 ---
 
