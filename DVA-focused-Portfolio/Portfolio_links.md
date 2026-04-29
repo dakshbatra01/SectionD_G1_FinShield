@@ -6,7 +6,7 @@
 |-----------------------|------------------------------------------------------|
 | Daksh Batra           | [View Portfolio](https://dva-portfolio-kappa.vercel.app/)    |
 | Prakhar Rawat         | [View Portfolio](https://github.com/Prakhar13o3)     |
-| Nitin Kumar           | [View Portfolio](https://github.com/Nitin-0017)      |
+| Nitin Kumar           | [View Portfolio](https://nitin-0017.github.io/DVA_Portfolio/)      |
 | Isha Tomar            | [View Portfolio](https://github.com/Bytebard089)     |
 | Kapish Rohilla        | [View Portfolio](https://kapish9741.github.io/)       |
 | Rishi Raj             | [View Portfolio](https://github.com/rishiraj38)      |
