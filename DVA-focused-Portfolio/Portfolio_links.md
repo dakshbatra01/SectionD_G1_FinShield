@@ -10,7 +10,7 @@
 | Isha Tomar            | [View Portfolio](https://github.com/Bytebard089)     |
 | Kapish Rohilla        | [View Portfolio](https://kapish9741.github.io/)       |
 | Rishi Raj             | [View Portfolio](https://github.com/rishiraj38)      |
-| Nishant Ranjan Singh  | [View Portfolio](https://github.com/IAmNishantSingh) |
+| Nishant Ranjan Singh  | [View Portfolio](https://iamnishantsingh.github.io/DVA_Protfolio/) |
 
 ---
 
